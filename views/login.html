@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>登录页面</title>
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+</head>
+<body>
+	<form action="/login_post" method="POST">
+		<div class="app-location" >
+			<h1>欢迎登录</h1>
+				<input id="name" name="name" type="text" class="text" value="用户名" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'text';}" >
+				<input id="password" name="password" type="password" value="Password" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Password';}">
+				<div class="submit"><input type="submit"  value="点击登录" ></div>
+				<div class="clear"></div>
+				<div class="new">
+					<h4><a class="submit" type="button" href="/register">注册账户</a></h4>
+					<div class="clear"></div>
+				</div>
+		</div>
+	</form>
+</body>
+</html>

@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>待办清单系统</title>
+    <!-- Bootstrap Styles-->
+    <link href="/css/bootstrap.css" rel="stylesheet" />
+    <!-- FontAwesome Styles-->
+    <link href="css/font-awesome.css" rel="stylesheet" />
+    <!-- Morris Chart Styles-->
+    <!-- <link href="assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" /> -->
+    <!-- Custom Styles-->
+    <link href="/css/custom-styles.css" rel="stylesheet" />
+    <!-- ljx Styles-->
+    <link href="/css/ljx.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">
+        <div id="wrapper">
+            <nav class="navbar navbar-default top-navbar" role="navigation">
+                <a class="navbar-brand"><i class="fa fa-comments"></i> <strong>MASTER </strong></a>
+                <a href="/logout" class="zhuxiao">注销</a>
+            </nav>
+        </div>
+            <nav class="navbar-default navbar-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <div id="list" class="menu_section">
+                        <ul class="nav" id="main-menu">
+                            <li>
+                                <a ><i class="fa fa-dashboard"></i> To-DO</a>
+                            </li>
+                            <li v-for="list in Lists" @click="show_lists(list.name)"><a><i class="glyphicon glyphicon-list" ></i><span>{{ list.name }}</span></a>
+                            </li>
+                            <li data-toggle="modal" data-target="#listmodal"><a><i class="glyphicon glyphicon-plus"></i><span> 添加清单</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div id="page-wrapper">
+                <div class="tittle">
+                    <h1>{{tittle}}</h1>
+                </div>
+                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                    新建待办事项
+                </button>
+                <div class="input-group">       
+                    <input type="text"  class="search" placeholder="请输入搜索事项" v-model="search_name"/>
+                    <button v-on:click="hide_finished">
+                        隐藏已完成
+                    </button>
+                    <button v-on:click="show_finished">
+                        显示已完成
+                    </button>
+                </div>
+                <div>
+                    <table  width="660px">
+                        <tr>
+                            <td>待办事项</td>
+                            <td>完成日期</td>
+                            <td>完成情况</td>
+                        </tr>
+                    </table>
+                    <div v-for="(todoItem,index) in show_matter">
+                        <table id="myTable" class="work">
+                            <tr>
+                                <td><input type="checkbox" v-on:click="finished(index)">{{todoItem.name}}</td>
+                                <td>{{todoItem.date}}</td>
+                                <td>{{todoItem.isFinished}}</td>
+                                <td>
+                                    <button data-toggle="modal" data-target="#myModal" v-on:click="editor(index)">编辑</button>
+                                    <button v-on:click="deleteItem(index)">删除</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <!-- 模态框（Modal） -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                添加事项
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="madal-body-item">
+                                    <span for="apwd" class="col-sm-3 ">事项</span>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="add-text" placeholder="请输入事项名称" v-model="newItemName" value="" class="form-control">
+                                    </div>    
+                                </div>
+                                <div class="madal-body-item">   
+                                    <span for="apwd" class="col-sm-3 ">日期</span>
+                                    <div class="col-sm-9">
+                                        <input type="date" id="add-date" placeholder="请输入日期" v-model="newItemDate" value="" class="form-control">
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                </button>
+                                <button type="button" class="btn btn-default" v-on:click="addItem">
+                                    确定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="listmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" 
+                                        aria-hidden="true">
+                                </button>
+                                <h4 class="modal-title" id="list_myModalLabel">
+                                    新建清单
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                 <div class="form-group">
+                                    <label for="uname" class="col-sm-3 control-label">名称</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="list_name" class="form-control well" placeholder="请输入清单名称"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                </button>
+                                <button type="button" class="btn btn-default" v-on:click="addlist()">
+                                    确定
+                                </button>
+                            </div>
+                    </div>
+                </div>
+                <script src="/js/jquery-1.10.2.js"></script>
+                <!-- Bootstrap Js -->
+                <script src="/js/bootstrap.min.js"></script>
+                <!-- Metis Menu Js -->
+                <script src="/js/jquery.metisMenu.js"></script>
+                <script src="/js/easypiechart.js"></script>
+                <script src="/js/easypiechart-data.js"></script>
+                <!-- Custom Js -->
+                <script src="/js/custom-scripts.js"></script>
+        
+                <!-- Vue.Js -->
+                <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
+        
+                <!-- myVue Js -->
+                <script src="myVue.js"></script>
+</body>
+
+</html>

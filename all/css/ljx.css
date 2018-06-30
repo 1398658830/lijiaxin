@@ -1,0 +1,28 @@
+.modal-body>div{
+    display: flex;
+    align-items: center;
+}
+.madal-body-item{
+    padding: 5px 0;
+}
+.work{
+    width: 880px;
+
+}
+.work td{
+    width: 20%;
+    height: 30px ;
+}
+.search{
+    width: 300px;
+    height:30px;
+}
+.tittle{
+    text-align: center;
+    color: #283643;
+}
+.zhuxiao{
+    float: right;
+    margin-top:10px;
+    margin-right: 10px;
+}
